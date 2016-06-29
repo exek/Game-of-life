@@ -70,11 +70,11 @@ export default class Grid {
       .map(([x, y]) => this.convertCellCoordsToIndex(x, y))
   }
 
-  getUniqueCellsNeighours(cells) {
+  getUniqueCellsNeighours(indexes) {
     const uniqueNeighbours = new Set();
-    _.each(cells, (cell) => {
-      this.getCellNeighbours(cell).each((neighbour) => {
-        uniqueNeighbours.add(neighbour);
+    _.each(indexes, (i) => {
+      this.getCellNeighbours(i).each((neighbourIndex) => {
+        uniqueNeighbours.add(neighbourIndex);
       });
     });
     return [...uniqueNeighbours];
@@ -85,13 +85,20 @@ export default class Grid {
   }
 
   getLiveCells() {
-    return this.cells.reduce((acc , el, i) => {
-      if (el) acc.push(i);
+    return this.cells.reduce((acc , cell, i) => {
+      if (cell) acc.push(i);
       return acc;
     }, []);
   }
 
+  getCellLiveNeighbours(i) {
+    return this.getCellNeighbours(i)
+      .filter(neighbourIndex => this.cells[neighbourIndex])
+  }
 
+  getCellLiveNeighboursCount(i) {
+    return this.getCellLiveNeighbours(i).length;
+  }
 
   killCell(i) {
     this.cells[i] = false;
