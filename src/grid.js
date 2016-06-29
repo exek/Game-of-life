@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class Grid {
 
   constructor(...args) {
@@ -16,15 +18,7 @@ export default class Grid {
   }
 
   initGrid() {
-    //create 2d array and fill it with false
-    this.cells = [];
-    for(let i = 0; i < this.height; i++) {
-      let row = [];
-      for(let j = 0; j < this.width; j++) {
-        row[j] = false;
-      }
-      this.cells[i] = row;
-    }
+    this.cells = Array(this.height, this.width).fill(false);
   }
 
   initGridFromMap(gridMap) {
@@ -40,15 +34,27 @@ export default class Grid {
 
     this.width = width;
     this.height = height;
-    this.cells = rows.map(row => row.split('').map(el => el === "^"))
+    this.cells = _.concat(...rows.map(row => row.split('').map(el => el === "^")))
   }
 
-  getCell(x, y) {
-    return this.cells[y][x];
+  getCellCoords(i) {
+    return {
+      x: i%this.width,
+      y: Math.floor(i/this.width)
+    }
   }
 
-  getCellNeighbours(x, y) {
-    const neighbours = [
+  convertCellCoordsToIndex(x, y) {
+    return y*this.width + x;
+  }
+
+  getCell(i) {
+    return this.cells[i];
+  }
+
+  getCellNeighbours(i) {
+    const {x, y} = this.getCellCoords(i);
+    const possibleNeighbours = [
       [x - 1, y + 1],
       [x    , y + 1],
       [x + 1, y + 1],
@@ -59,18 +65,27 @@ export default class Grid {
       [x + 1, y - 1]
     ];
 
-    return neighbours.filter(([x, y]) => this.isCorrectNeighbour(x, y))
+    return possibleNeighbours
+      .filter(([x, y]) => this.isCorrectNeighbour(x, y))
+      .map(([x, y]) => this.convertCellCoordsToIndex(x, y))
   }
 
   isCorrectNeighbour(x, y) {
     return !(x < 0 || y < 0 || x >= this.width || y >= this.height)
   }
 
-  killCell(x, y) {
-    this.cells[y][x] = false;
+  getLiveCells() {
+    return this.cells.reduce((acc , el, i) => {
+      if (el) acc.push(i);
+      return acc;
+    }, []);
   }
 
-  createCell(x, y) {
-    this.cells[y][x] = true;
+  killCell(i) {
+    this.cells[i] = false;
+  }
+
+  createCell(i) {
+    this.cells[i] = true;
   }
 }
