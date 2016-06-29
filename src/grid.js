@@ -15,6 +15,8 @@ export default class Grid {
 
       this.initGrid();
     }
+
+    this.cachedNeighbours = new Map();
   }
 
   initGrid() {
@@ -53,6 +55,10 @@ export default class Grid {
   }
 
   getCellNeighbours(i) {
+    //check in cache
+    if(this.cachedNeighbours.has(i))
+      return this.cachedNeighbours.get(i);
+
     const {x, y} = this.getCellCoords(i);
     const possibleNeighbours = [
       [x - 1, y + 1],
@@ -65,9 +71,12 @@ export default class Grid {
       [x + 1, y - 1]
     ];
 
-    return possibleNeighbours
+    const neighbours = possibleNeighbours
       .filter(([x, y]) => this.isCorrectNeighbour(x, y))
-      .map(([x, y]) => this.convertCellCoordsToIndex(x, y))
+      .map(([x, y]) => this.convertCellCoordsToIndex(x, y));
+
+    this.cachedNeighbours.set(i, neighbours);
+    return neighbours;
   }
 
   getUniqueCellsNeighours(indexes) {
