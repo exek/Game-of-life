@@ -1,13 +1,13 @@
 import React from 'react';
 
-export default class GameOfLifeView extends React.Component{
+export default class Grid extends React.Component{
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <div>{this.props.welcome}</div>
+      <div>Grid</div>
     )
   }
 }
