@@ -70,6 +70,16 @@ export default class Grid {
       .map(([x, y]) => this.convertCellCoordsToIndex(x, y))
   }
 
+  getUniqueCellsNeighours(cells) {
+    const uniqueNeighbours = new Set();
+    _.each(cells, (cell) => {
+      this.getCellNeighbours(cell).each((neighbour) => {
+        uniqueNeighbours.add(neighbour);
+      });
+    });
+    return [...uniqueNeighbours];
+  }
+
   isCorrectNeighbour(x, y) {
     return !(x < 0 || y < 0 || x >= this.width || y >= this.height)
   }
@@ -80,6 +90,8 @@ export default class Grid {
       return acc;
     }, []);
   }
+
+
 
   killCell(i) {
     this.cells[i] = false;
