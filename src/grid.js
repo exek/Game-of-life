@@ -72,8 +72,8 @@ export default class Grid {
 
   getUniqueCellsNeighours(indexes) {
     const uniqueNeighbours = new Set();
-    _.each(indexes, (i) => {
-      this.getCellNeighbours(i).each((neighbourIndex) => {
+    _.each(indexes, i => {
+      _.each(this.getCellNeighbours(i), neighbourIndex => {
         uniqueNeighbours.add(neighbourIndex);
       });
     });
