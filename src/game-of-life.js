@@ -17,10 +17,12 @@ export default class GameOfLife {
 
   run() {
     this.render();
+    setInterval(() => this.loop(), 300);
   }
 
   loop() {
-
+    this.updateGrid();
+    this.render();
   }
 
   updateGrid() {
@@ -71,9 +73,7 @@ export default class GameOfLife {
 
   render() {
     const options = {
-      width: this.width,
-      height: this.height,
-      grid: this.grid,
+      grid: this.grid
     };
     ReactDOM.render(<GameOfLifeView {...options}/>, document.getElementById('root'));
   }
