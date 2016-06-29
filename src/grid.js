@@ -56,8 +56,11 @@ export default class Grid {
 
   getCellNeighbours(i) {
     //check in cache
-    if(this.cachedNeighbours.has(i))
+    if(this.cachedNeighbours.has(i)){
+      console.log("got from cache")
       return this.cachedNeighbours.get(i);
+    }
+
 
     const {x, y} = this.getCellCoords(i);
     const possibleNeighbours = [
@@ -107,6 +110,14 @@ export default class Grid {
 
   getCellLiveNeighboursCount(i) {
     return this.getCellLiveNeighbours(i).length;
+  }
+
+  isCellLive(i) {
+    return this.cells[i];
+  }
+
+  isCellDead(i) {
+    return !this.cells[i];
   }
 
   killCell(i) {
