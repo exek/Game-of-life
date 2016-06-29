@@ -9,7 +9,7 @@ export default class GameOfLifeView extends React.Component{
   render() {
     return (
       <div>
-        <Grid />
+        <Grid grid={this.props.grid}/>
       </div>
     )
   }
