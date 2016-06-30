@@ -8,16 +8,50 @@ import Grid from './grid';
 export default class GameOfLife {
   constructor(options) {
     if(options.gridMap) {
-      this.grid = new Grid(options.gridMap);
+      this.gridMap = options.gridMap;
     } else {
-      const {width = 100, height = 100} = options;
+      this.gridMap = null;
+      this.width  = options.width || 100;
+      this.height = height.height || 100;
+    }
+
+    this.initGrid();
+    this.timer = null;
+  }
+
+  initGrid() {
+    if(this.gridMap) {
+      this.grid = new Grid(this.gridMap);
+    } else {
       this.grid = new Grid(this.heigth, this.width);
     }
   }
 
-  run() {
+  start() {
+    this.run();
     this.render();
-    setInterval(() => this.loop(), 300);
+  }
+
+  stop() {
+    clearInterval(this.timer);
+    this.initGrid();
+    this.render();
+  }
+
+  pause() {
+    clearInterval(this.timer);
+    this.render();
+  }
+
+  reset() {
+    clearInterval(this.timer);
+    this.initGrid();
+    this.start();
+    this.render();
+  }
+
+  run() {
+    this.timer = setInterval(() => this.loop(), 200);
   }
 
   loop() {
@@ -73,7 +107,13 @@ export default class GameOfLife {
 
   render() {
     const options = {
-      grid: this.grid
+      grid: this.grid,
+      controls: {
+        start: this.start.bind(this),
+        pause: this.pause.bind(this),
+        stop: this.stop.bind(this),
+        reset: this.reset.bind(this)
+      }
     };
     ReactDOM.render(<GameOfLifeView {...options}/>, document.getElementById('root'));
   }
