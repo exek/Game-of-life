@@ -16,7 +16,8 @@ export default class GameOfLife {
     }
 
     this.initGrid();
-    this.timer = null;
+
+    this.timer   = null;
   }
 
   initGrid() {
@@ -28,6 +29,7 @@ export default class GameOfLife {
   }
 
   start() {
+    clearInterval(this.timer);
     this.run();
     this.render();
   }
