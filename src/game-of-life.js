@@ -6,26 +6,18 @@ import GameOfLifeView from './components/game';
 import Grid from './grid';
 
 export default class GameOfLife {
-  constructor(options) {
-    if(options.gridMap) {
-      this.gridMap = options.gridMap;
-    } else {
-      this.gridMap = null;
-      this.width  = options.width || 100;
-      this.height = height.height || 100;
-    }
-
-    this.initGrid();
-
+  constructor() {
     this.timer   = null;
   }
 
-  initGrid() {
-    if(this.gridMap) {
-      this.grid = new Grid(this.gridMap);
-    } else {
-      this.grid = new Grid(this.heigth, this.width);
-    }
+  loadTemplate(template) {
+    this.template = template;
+    this.grid = new Grid(this.template);
+  }
+
+  loadEmptyGrid(width = 25, height = 25) {
+    this.template = null;
+    this.grid = new Grid(width, height);
   }
 
   start() {
