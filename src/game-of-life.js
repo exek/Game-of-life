@@ -7,50 +7,74 @@ import Grid from './grid';
 
 export default class GameOfLife {
   constructor() {
-    this.timer   = null;
+    this.timer = null;
+    this.running = false;
+    this.speed = 100;
   }
 
   loadTemplate(template) {
     this.template = template;
+
     this.grid = new Grid(this.template);
   }
 
   loadEmptyGrid(width = 25, height = 25) {
     this.template = null;
+
+    this.width  = width;
+    this.height = height;
+
     this.grid = new Grid(width, height);
   }
 
+  loadLastGrid() {
+    if(this.template) {
+      this.loadTemplate(this.template);
+    } else {
+      this.loadEmptyGrid(this.width, this.height);
+    }
+  }
+
   start() {
-    clearInterval(this.timer);
-    this.run();
-    this.render();
+    this.running = true;
   }
 
   stop() {
-    clearInterval(this.timer);
-    this.initGrid();
-    this.render();
+    this.running = false;
+    this.loadLastGrid();
   }
 
   pause() {
-    clearInterval(this.timer);
-    this.render();
+    this.running = false;
   }
 
   reset() {
-    clearInterval(this.timer);
-    this.initGrid();
+    this.stop();
     this.start();
-    this.render();
   }
 
   run() {
-    this.timer = setInterval(() => this.loop(), 200);
-  }
 
-  loop() {
-    this.updateGrid();
-    this.render();
+    let previous = Date.now();
+    let lag = 0.0;
+    const MS_PER_UPDATE = this.speed;
+
+    const loop = () => {
+      let current = Date.now();
+      let elapsed = current - previous;
+      previous = current;
+      lag += elapsed;
+
+      while (lag >= MS_PER_UPDATE) {
+        if(this.running) this.updateGrid();
+        lag -= MS_PER_UPDATE;
+      }
+
+      this.render();
+      requestAnimationFrame(loop);
+    };
+
+    loop();
   }
 
   updateGrid() {
