@@ -10,6 +10,24 @@ export default class GameOfLife {
     this.timer = null;
     this.running = false;
     this.speed = 100;
+
+    this.controls = {
+      game: {
+        controls: [
+          {title: 'start', action: this.start.bind(this)},
+          {title: 'pause', action: this.pause.bind(this)},
+          {title: 'stop', action: this.stop.bind(this)},
+          {title: 'reset', action: this.reset.bind(this)},
+        ]
+      },
+      speed: {
+        controls: [
+          {title: 'slow', action: this.setSpeed.bind(this, 600)},
+          {title: 'normal', action: this.setSpeed.bind(this, 300)},
+          {title: 'fast', action: this.setSpeed.bind(this, 100)}
+        ]
+      }
+    }
   }
 
   loadTemplate(template) {
@@ -53,21 +71,25 @@ export default class GameOfLife {
     this.start();
   }
 
+  setSpeed(newSpeed) {
+    this.speed = newSpeed;
+    console.log(this.speed);
+  }
+
   run() {
 
     let previous = Date.now();
     let lag = 0.0;
-    const MS_PER_UPDATE = this.speed;
-
+    
     const loop = () => {
       let current = Date.now();
       let elapsed = current - previous;
       previous = current;
       lag += elapsed;
 
-      while (lag >= MS_PER_UPDATE) {
+      while (lag >= this.speed) {
         if(this.running) this.updateGrid();
-        lag -= MS_PER_UPDATE;
+        lag -= this.speed;
       }
 
       this.render();
@@ -124,15 +146,9 @@ export default class GameOfLife {
   }
 
   render() {
-    const options = {
-      grid: this.grid,
-      controls: {
-        start: this.start.bind(this),
-        pause: this.pause.bind(this),
-        stop: this.stop.bind(this),
-        reset: this.reset.bind(this)
-      }
-    };
-    ReactDOM.render(<GameOfLifeView {...options}/>, document.getElementById('root'));
+    ReactDOM.render(
+      <GameOfLifeView controls={this.controls} grid={this.grid}/>,
+      document.getElementById('root')
+    );
   }
 }
