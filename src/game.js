@@ -7,9 +7,9 @@ import Grid from './grid';
 
 export default class GameOfLife {
   constructor() {
-    this.timer = null;
     this.running = false;
     this.speed = 100;
+    this.iteration = 0;
 
     this.controls = {
       game: {
@@ -51,11 +51,18 @@ export default class GameOfLife {
   }
 
   clear() {
+    this.reset();
     this.loadEmptyGrid(this.width, this.height);
   }
 
   fill() {
+    this.reset();
     this.loadGeneratedGrid(this.width, this.height);
+  }
+
+  reset() {
+    this.iteration = 0;
+    this.running = false;
   }
 
   setSpeed(newSpeed) {
@@ -92,6 +99,8 @@ export default class GameOfLife {
 
     _.each(cellsToDie, i => this.grid.killCell(i));
     _.each(cellsToBeBorn, i => this.grid.createCell(i));
+
+    this.iteration++;
   }
 
   getCellsToEvaluate() {
@@ -134,7 +143,7 @@ export default class GameOfLife {
 
   render() {
     ReactDOM.render(
-      <GameOfLifeView controls={this.controls} grid={this.grid}/>,
+      <GameOfLifeView controls={this.controls} grid={this.grid} iteration={this.iteration}/>,
       document.getElementById('root')
     );
   }
