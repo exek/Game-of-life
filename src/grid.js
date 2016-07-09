@@ -2,41 +2,19 @@ import _ from 'lodash';
 
 export default class Grid {
 
-  constructor(...args) {
-    if(args.length === 1) {
-      //if argument is grid map
-      const gridMap = args[0];
-      this.initGridFromMap(gridMap);
-    } else {
-      //if argument is width and height
-      const [width, height] = args;
-      this.width = width;
-      this.height = height;
-
-      this.initGrid();
-    }
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+    this.cells = _.times(this.height * this.width, () => false);
 
     this.cachedNeighbours = new Map();
   }
 
-  initGrid() {
-    this.cells = Array(this.height, this.width).fill(false);
-  }
-
-  initGridFromMap(gridMap) {
-    const trimmedGridMap = gridMap.trim();
-    const rows = gridMap.split('\n').filter(row => row.length);
-
-    if(rows.length === 0) throw Error('Invalid grid map');
-
-    const height = rows.length;
-    const width  = rows[0].length;
-
-    if(rows.some(row => row.length != width)) throw Error('Invalid grid map');
-
-    this.width = width;
-    this.height = height;
-    this.cells = _.concat(...rows.map(row => row.split('').map(el => el === "^")))
+  fillRandom() {
+    console.log(this);
+    _.each(this.cells, (val, i) => {
+      if(Math.random() >= 0.5) this.createCell(i)
+    })
   }
 
   getCellCoords(i) {
@@ -57,10 +35,8 @@ export default class Grid {
   getCellNeighbours(i) {
     //check in cache
     if(this.cachedNeighbours.has(i)){
-      console.log("got from cache")
       return this.cachedNeighbours.get(i);
     }
-
 
     const {x, y} = this.getCellCoords(i);
     const possibleNeighbours = [

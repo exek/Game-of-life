@@ -16,8 +16,8 @@ export default class GameOfLife {
         controls: [
           {title: 'start', action: this.start.bind(this)},
           {title: 'pause', action: this.pause.bind(this)},
-          {title: 'stop', action: this.stop.bind(this)},
-          {title: 'reset', action: this.reset.bind(this)},
+          {title: 'clear', action: this.clear.bind(this)},
+          {title: 'fill', action: this.fill.bind(this)},
         ]
       },
       speed: {
@@ -30,45 +30,32 @@ export default class GameOfLife {
     }
   }
 
-  loadTemplate(template) {
-    this.template = template;
-
-    this.grid = new Grid(this.template);
-  }
-
   loadEmptyGrid(width = 25, height = 25) {
-    this.template = null;
-
     this.width  = width;
     this.height = height;
 
     this.grid = new Grid(width, height);
   }
 
-  loadLastGrid() {
-    if(this.template) {
-      this.loadTemplate(this.template);
-    } else {
-      this.loadEmptyGrid(this.width, this.height);
-    }
+  loadGeneratedGrid(width = 25, height = 25) {
+    this.loadEmptyGrid(width, height);
+    this.grid.fillRandom();
   }
 
   start() {
     this.running = true;
   }
 
-  stop() {
-    this.running = false;
-    this.loadLastGrid();
-  }
-
   pause() {
     this.running = false;
   }
 
-  reset() {
-    this.stop();
-    this.start();
+  clear() {
+    this.loadEmptyGrid(this.width, this.height);
+  }
+
+  fill() {
+    this.loadGeneratedGrid(this.width, this.height);
   }
 
   setSpeed(newSpeed) {
@@ -80,7 +67,7 @@ export default class GameOfLife {
 
     let previous = Date.now();
     let lag = 0.0;
-    
+
     const loop = () => {
       let current = Date.now();
       let elapsed = current - previous;
