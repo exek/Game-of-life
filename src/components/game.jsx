@@ -7,30 +7,43 @@ export default class GameOfLifeView extends React.Component{
   }
 
   getGameControls() {
-    const controls = this.props.controls.game.controls;
-    return controls.map(control => (
-      <button key={"game-" + control.title} onClick={control.action}>{control.title}</button>
-    ))
+    const game = this.props.game;
+    return (
+      <div className="controls game-controls">
+        <button onClick={() => game.start()}>
+          <i className="fa fa-play" />
+        </button>
+        <button onClick={() => game.pause()}>
+          <i className="fa fa-pause" />
+        </button>
+        <button onClick={() => game.clear()}>
+          <i className="fa fa-stop" />
+        </button>
+        <button onClick={() => game.fill()}>
+          <i className="fa fa-random" />
+        </button>
+      </div>
+    )
   }
 
   getGameSpeedControls() {
-    const controls = this.props.controls.speed.controls;
-    return controls.map(control => (
-      <button key={"speed-" + control.title} onClick={control.action}>{control.title}</button>
-    ))
+    return (
+      <div className="controls speed-controls">
+        <button onClick={() => game.setSpeed(600)}>slow</button>
+        <button onClick={() => game.setSpeed(300)}>normal</button>
+        <button onClick={() => game.setSpeed(100)}>fast</button>
+      </div>
+    )
   }
 
   render() {
-    this.getGameControls();
+    const game = this.props.game;
     return (
       <div>
-        <div className="controls game-controls">
-          {this.getGameControls()}
-        </div>
-        <Grid grid={this.props.grid}/>
-        <div className="controls speed-controls">
-          {this.getGameSpeedControls()}
-        </div>
+        <div>{game.iteration}</div>
+        {this.getGameControls()}
+        <Grid grid={game.grid}/>
+        {this.getGameSpeedControls()}
       </div>
     )
   }

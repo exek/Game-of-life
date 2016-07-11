@@ -10,24 +10,6 @@ export default class GameOfLife {
     this.running = false;
     this.speed = 100;
     this.iteration = 0;
-
-    this.controls = {
-      game: {
-        controls: [
-          {title: 'start', action: this.start.bind(this)},
-          {title: 'pause', action: this.pause.bind(this)},
-          {title: 'clear', action: this.clear.bind(this)},
-          {title: 'fill', action: this.fill.bind(this)},
-        ]
-      },
-      speed: {
-        controls: [
-          {title: 'slow', action: this.setSpeed.bind(this, 600)},
-          {title: 'normal', action: this.setSpeed.bind(this, 300)},
-          {title: 'fast', action: this.setSpeed.bind(this, 100)}
-        ]
-      }
-    }
   }
 
   loadEmptyGrid(width = 25, height = 25) {
@@ -143,7 +125,7 @@ export default class GameOfLife {
 
   render() {
     ReactDOM.render(
-      <GameOfLifeView controls={this.controls} grid={this.grid} iteration={this.iteration}/>,
+      <GameOfLifeView game={this}/>,
       document.getElementById('root')
     );
   }
