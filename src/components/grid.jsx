@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-export default class Grid extends React.Component{
+export default class GridView extends React.Component{
   constructor(props) {
     super(props);
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
-import GameOfLifeView from './components/game';
+import GameView from './components/game';
 import Grid from './grid';
 
 export default class GameOfLife {
@@ -119,7 +119,7 @@ export default class GameOfLife {
 
   render() {
     ReactDOM.render(
-      <GameOfLifeView game={this}/>,
+      <GameView game={this}/>,
       document.getElementById('root')
     );
   }

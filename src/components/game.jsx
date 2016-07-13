@@ -20,7 +20,7 @@ const FILL_MODES = {
   'high': {val: .7}
 }
 
-export default class GameOfLifeView extends React.Component{
+export default class GameView extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -42,10 +42,14 @@ export default class GameOfLifeView extends React.Component{
     return (
       <div className="controls game-controls">
         <div className="controls-row">
-          <button onClick={() => game.start()}>
+          <button
+            className={game.running ? 'active' : ''}
+            onClick={() => game.start()}>
             <i className="fa fa-play" />
           </button>
-          <button onClick={() => game.pause()}>
+          <button
+            className={!game.running ? 'active' : ''}
+            onClick={() => game.pause()}>
             <i className="fa fa-pause" />
           </button>
           <button onClick={() => game.clear()}>
@@ -75,7 +79,7 @@ export default class GameOfLifeView extends React.Component{
   render() {
     const game = this.props.game;
     return (
-      <div className="game-wrapper">
+      <div className={"game-wrapper board-" + this.state.board}>
         <GridView grid={game.grid}/>
         <div className="controls-container">
           <div>Iteration: {game.iteration}</div>
