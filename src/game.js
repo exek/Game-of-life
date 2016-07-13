@@ -19,11 +19,6 @@ export default class GameOfLife {
     this.grid = new Grid(width, height);
   }
 
-  loadGeneratedGrid(width = 25, height = 25) {
-    this.loadEmptyGrid(width, height);
-    this.grid.fillRandom();
-  }
-
   start() {
     this.running = true;
   }
@@ -37,9 +32,9 @@ export default class GameOfLife {
     this.loadEmptyGrid(this.width, this.height);
   }
 
-  fill() {
-    this.reset();
-    this.loadGeneratedGrid(this.width, this.height);
+  fill(coeff) {
+    this.clear();
+    this.grid.fillRandom(coeff);
   }
 
   reset() {
@@ -49,7 +44,6 @@ export default class GameOfLife {
 
   setSpeed(newSpeed) {
     this.speed = newSpeed;
-    console.log(this.speed);
   }
 
   run() {

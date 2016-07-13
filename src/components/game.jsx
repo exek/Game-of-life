@@ -14,6 +14,12 @@ const SPEED_MODES = {
   'fast': {val: 100}
 }
 
+const FILL_MODES = {
+  'low': {val: .1},
+  'normal': {val: .4},
+  'high': {val: .7}
+}
+
 export default class GameOfLifeView extends React.Component{
   constructor(props) {
     super(props);
@@ -24,10 +30,11 @@ export default class GameOfLifeView extends React.Component{
 
     const game = props.game;
     game.setSpeed(SPEED_MODES[this.state.speed].val);
-    game.loadGeneratedGrid(
+    game.loadEmptyGrid(
       BOARD_SIZES[this.state.board].width,
       BOARD_SIZES[this.state.board].height
     );
+    game.fill(FILL_MODES['normal'].val)
   }
 
   getGameControls() {
@@ -43,9 +50,6 @@ export default class GameOfLifeView extends React.Component{
           </button>
           <button onClick={() => game.clear()}>
             <i className="fa fa-stop" />
-          </button>
-          <button onClick={() => game.fill()}>
-            <i className="fa fa-random" />
           </button>
         </div>
       </div>
@@ -63,6 +67,11 @@ export default class GameOfLifeView extends React.Component{
     this.setState({board: size})
   }
 
+  onGenerateBoard(mode = 'normal') {
+    const coeff = FILL_MODES[mode].val;
+    this.props.game.fill(coeff);
+  }
+
   render() {
     const game = this.props.game;
     return (
@@ -73,14 +82,19 @@ export default class GameOfLifeView extends React.Component{
 
           {this.getGameControls()}
           <Controls
+            title="Generate: "
+            action={this.onGenerateBoard.bind(this)}
+            controls={_.keys(FILL_MODES)}
+          />
+          <Controls
             title="Speed: "
-            action={this.changeSpeed.bind(this)}
+            action={this.onChangeSpeed.bind(this)}
             controls={_.keys(SPEED_MODES)}
             active={this.state.speed}
           />
           <Controls
             title="Size: "
-            action={this.chanegeBoardSize.bind(this)}
+            action={this.onChanegeBoardSize.bind(this)}
             controls={_.keys(BOARD_SIZES)}
             active={this.state.board}
           />

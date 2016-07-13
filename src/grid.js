@@ -10,10 +10,10 @@ export default class Grid {
     this.cachedNeighbours = new Map();
   }
 
-  fillRandom() {
+  fillRandom(coeff = .5) {
     console.log(this);
     _.each(this.cells, (val, i) => {
-      if(Math.random() >= 0.5) this.createCell(i)
+      if(Math.random() < coeff) this.createCell(i)
     })
   }
 
