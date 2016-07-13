@@ -1,5 +1,6 @@
 import React from 'react';
-import Grid from './grid';
+import GridView from './grid';
+import Controls from './controls';
 
 const BOARD_SIZES = {
   '50x30':  {width: 50,  height: 30},
@@ -33,72 +34,57 @@ export default class GameOfLifeView extends React.Component{
     const game = this.props.game;
     return (
       <div className="controls game-controls">
-        <button onClick={() => game.start()}>
-          <i className="fa fa-play" />
-        </button>
-        <button onClick={() => game.pause()}>
-          <i className="fa fa-pause" />
-        </button>
-        <button onClick={() => game.clear()}>
-          <i className="fa fa-stop" />
-        </button>
-        <button onClick={() => game.fill()}>
-          <i className="fa fa-random" />
-        </button>
+        <div className="controls-row">
+          <button onClick={() => game.start()}>
+            <i className="fa fa-play" />
+          </button>
+          <button onClick={() => game.pause()}>
+            <i className="fa fa-pause" />
+          </button>
+          <button onClick={() => game.clear()}>
+            <i className="fa fa-stop" />
+          </button>
+          <button onClick={() => game.fill()}>
+            <i className="fa fa-random" />
+          </button>
+        </div>
       </div>
     )
   }
 
-  changeSpeed(speed) {
+  onChangeSpeed(speed) {
     this.props.game.setSpeed(SPEED_MODES[speed].val);
     this.setState({speed: speed})
   }
 
-  getGameSpeedControls() {
-    return (
-      <div className="controls speed-controls">
-        {_.map(SPEED_MODES, (val, title) => (
-          <button
-            key={title}
-            className={this.state.speed === title ? 'active' : ''}
-            onClick={() => this.changeSpeed(title)}>
-            {title}
-          </button>
-        ))}
-      </div>
-    )
-  }
-
-  chanegeBoardSize(size) {
+  onChanegeBoardSize(size) {
     const {width, height} = BOARD_SIZES[size];
     this.props.game.loadEmptyGrid(width, height);
     this.setState({board: size})
   }
 
-  getBoardSizeControls() {
-    return (
-      <div className="controls board-controls">
-        {_.map(BOARD_SIZES, (size, title) => (
-          <button
-            key={title}
-            className={this.state.board === title ? 'active' : ''}
-            onClick={() => this.chanegeBoardSize(title)}>
-            {title}
-          </button>
-        ))}
-      </div>
-    )
-  }
-
   render() {
     const game = this.props.game;
     return (
-      <div>
-        <div>{game.iteration}</div>
-        {this.getGameControls()}
-        <Grid grid={game.grid}/>
-        {this.getGameSpeedControls()}
-        {this.getBoardSizeControls()}
+      <div className="game-wrapper">
+        <GridView grid={game.grid}/>
+        <div className="controls-container">
+          <div>Iteration: {game.iteration}</div>
+
+          {this.getGameControls()}
+          <Controls
+            title="Speed: "
+            action={this.changeSpeed.bind(this)}
+            controls={_.keys(SPEED_MODES)}
+            active={this.state.speed}
+          />
+          <Controls
+            title="Size: "
+            action={this.chanegeBoardSize.bind(this)}
+            controls={_.keys(BOARD_SIZES)}
+            active={this.state.board}
+          />
+        </div>
       </div>
     )
   }
