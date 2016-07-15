@@ -34,7 +34,13 @@ export default class GameView extends React.Component{
       BOARD_SIZES[this.state.board].width,
       BOARD_SIZES[this.state.board].height
     );
-    game.fill(FILL_MODES['normal'].val)
+    game.fill(FILL_MODES['normal'].val);
+
+    document.addEventListener("visibilitychange", function() {
+      if(document.visibilityState === 'hidden') {
+        game.pause();
+      }
+    });
   }
 
   getGameControls() {
