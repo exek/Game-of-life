@@ -6,7 +6,8 @@ import GameView from './components/game';
 import Grid from './grid';
 
 export default class GameOfLife {
-  constructor() {
+  constructor(el) {
+    this.el = el;
     this.running = false;
     this.speed = 100;
     this.iteration = 0;
@@ -83,10 +84,10 @@ export default class GameOfLife {
     const liveCells = this.grid.getLiveCells();
     const liveCellsNeighbours = this.grid.getUniqueCellsNeighours(liveCells);
 
-    const cellsToEvaluate = [...new Set([
-      ...liveCells,
-      ...liveCellsNeighbours
-    ])];
+    const cellsToEvaluate = _.union(
+      liveCells,
+      liveCellsNeighbours
+    )
 
     return cellsToEvaluate;
   }
@@ -118,9 +119,6 @@ export default class GameOfLife {
   }
 
   render() {
-    ReactDOM.render(
-      <GameView game={this}/>,
-      document.getElementById('root')
-    );
+    ReactDOM.render(<GameView game={this}/>, this.el);
   }
 }
