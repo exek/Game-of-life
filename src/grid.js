@@ -65,7 +65,7 @@ export default class Grid {
         uniqueNeighbours.add(neighbourIndex);
       });
     });
-    return [...uniqueNeighbours];
+    return Array.from(uniqueNeighbours);
   }
 
   isCorrectNeighbour(x, y) {
