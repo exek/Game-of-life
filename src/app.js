@@ -1,27 +1,9 @@
-import GameOfLife from './game-of-life';
+import GameOfLife from './game';
 import Grid from './grid';
 import _ from 'lodash';
 
-const gridMap =
-`
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-00000000000000000000
-`
-
-const options = {
-  gridMap
-}
-
 console.clear();
-const game = new GameOfLife(options);
-
+const game = new GameOfLife(
+  document.getElementById('game-app')
+);
 game.run();
