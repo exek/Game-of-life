@@ -4,7 +4,7 @@ const webpack = require('webpack');
 module.exports = {
   entry: ["webpack-dev-server/client" ,'./src/app.js'],
 
-  output: { path: __dirname, filename: 'build/app.js' },
+  output: { path: __dirname, filename: 'app.js' },
 
   watch: true,
 
