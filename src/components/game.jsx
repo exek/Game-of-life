@@ -73,6 +73,7 @@ export default class GameView extends React.Component{
 
   onChanegeBoardSize(size) {
     const {width, height} = BOARD_SIZES[size];
+    this.props.game.reset();
     this.props.game.loadEmptyGrid(width, height);
     this.setState({board: size})
   }
@@ -88,11 +89,12 @@ export default class GameView extends React.Component{
       <div className={"game-wrapper board-" + this.state.board}>
         <GridView grid={game.grid}/>
         <div className="controls-container">
-          <div>Iteration: {game.iteration}</div>
-
+          <div className="iterations">
+            Iteration: <span className="iterations-count">{game.iteration}</span>
+          </div>
           {this.getGameControls()}
           <Controls
-            title="Generate: "
+            title="Generate (density): "
             action={this.onGenerateBoard.bind(this)}
             controls={_.keys(FILL_MODES)}
           />
