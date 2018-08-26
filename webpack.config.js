@@ -1,42 +1,32 @@
-const path = require('path');
-const webpack = require('webpack');
-
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
-  entry: ["webpack-dev-server/client" ,'./src/app.js'],
-
-  output: { path: __dirname, filename: 'app.js' },
-
-  watch: true,
-
-  module: {
-    loaders: [
+  module: {
+    rules: [
       {
-        test: /.jsx?$/,
-        loader: 'babel',
+        test: /\.jsx?$/,
         exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react'],
-          plugins: ["transform-class-properties"]
+        use: {
+          loader: "babel-loader"
         }
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: "html-loader",
+            options: { minimize: true }
+          }
+        ]
       }
     ]
-  },
-
+  },
   resolve: {
-    modulesDirectories: ['node_modules'],
-    extensions: ['', '.js', '.jsx']
+    extensions: [".js", ".jsx"]
   },
-
-  resolveLoader: {
-    modulesDirectories: ['node_modules'],
-    moduleTemplates: ['*-loader'],
-    extensions: ['', '.js']
-  },
-
-  devtool: "eval",
-
-  devServer: {
-    host: 'localhost',
-    port: '8080'
-  }
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: "./src/index.html",
+      filename: "./index.html"
+    })
+  ]
 };
